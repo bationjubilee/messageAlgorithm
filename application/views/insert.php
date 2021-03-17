@@ -76,7 +76,7 @@
         					</div>
       					
         					<div class="form-group" style="padding-left:93%">	
-                    <button  type="submit" name="save" value="Save parsedataCAT" class="btn btn-success">Send</button>
+                    <button  type="submit" name="save2" value="Save2 parsedataCAT" class="btn btn-success">Send</button>
         					</div>	
       				  </form>
       				</div>	

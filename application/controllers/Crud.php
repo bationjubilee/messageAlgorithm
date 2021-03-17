@@ -41,31 +41,61 @@ class Crud extends CI_Controller
 
 	public function parsedataCAT()
 	{
-		if ($this->input->post('save')) {
-			$MobileNo = $this->input->post('mobileNO');
-			$Message = $this->input->post('sms_content');
-			$parsemess = json_encode($this->input->post('sms_content'));
-			$fin_data = $this->Crud_model->fetch_data();
-			$counterid = 0;	
-			$SMS_Keyword_ID = 0;
-			foreach ($fin_data as $key) {
-				if(strpos($parsemess, $key->Keyword_desc) !== false){
-					$this->passCat($MobileNo,$Message,$SMS_Keyword_ID = $key->SMS_Keyword_ID);
-					echo "Message Sent Successfully!=\n and Categorized";
-					$counterid = 1;
-					break;
-				} elseif(strpos($parsemess, $key->Keyword_desc) === false){
-					$SMS_Keyword_ID = 0;
-				}
+		// if ($this->input->post('save')) {
+		// 	$MobileNo = $this->input->post('mobileNO');
+		// 	$Message = $this->input->post('sms_content');
+		// 	$parsemess = json_encode($this->input->post('sms_content'));
+		// 	$fin_data = $this->Crud_model->fetch_data();
+		// 	$counterid = 0;	
+		// 	$SMS_Keyword_ID = 0;
+			// foreach ($fin_data as $key) {
+			// 	if(strpos($parsemess, $key->Keyword_desc) !== false){
+			// 		$this->passCat($MobileNo,$Message,$SMS_Keyword_ID = $key->SMS_Keyword_ID);
+			// 		echo "Message Sent Successfully!=\n and Categorized";
+			// 		$counterid = 1;
+			// 		break;
+			// 	} elseif(strpos($parsemess, $key->Keyword_desc) === false){
+			// 		$SMS_Keyword_ID = 0;
+			// 	}
 
 																																
-			}
-			if ($counterid != 1) {
-				$this->passCat($MobileNo,$Message,$SMS_Keyword_ID);
-				echo "Message Sent Successfully!\n But Uncategorized";
-			}
-		}
+		// 	}
+		// 	if ($counterid != 1) {
+		// 		$this->passCat($MobileNo,$Message,$SMS_Keyword_ID);
+		// 		echo "Message Sent Successfully!\n But Uncategorized";
+		// 	}
+		// }
 
+        if ($this->input->post('save2')) {
+            $mobileNumber = $this->input->post('mobileNO');
+			$messageContent = $this->input->post('sms_content');
+			$fin_data = $this->Crud_model->fetch_data();
+
+            $extractFirstLine = explode("\n", $messageContent);
+            $messageArr = explode(' ', $extractFirstLine[0]);
+            
+
+
+            echo $extractFirstLine[0];
+
+            echo '<br>';
+            echo '<br>';
+            
+            echo $messageArr[0];
+
+            echo '<br>';
+            $dataRes = $this->Crud_model->isKeyworExist($messageArr[0]);
+            echo json_encode($dataRes);
+
+              
+            echo '<br>';
+            echo '<br>';
+            echo json_encode($fin_data);
+            echo '<br>';
+            echo $mobileNumber;
+            echo '<br>';
+            echo $messageContent;
+        }
 	}
 
 	function passCat($MobileNo,$Message,$SMS_Keyword_ID){
