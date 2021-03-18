@@ -69,32 +69,38 @@ class Crud extends CI_Controller
         if ($this->input->post('save2')) {
             $mobileNumber = $this->input->post('mobileNO');
 			$messageContent = $this->input->post('sms_content');
-			$fin_data = $this->Crud_model->fetch_data();
 
             $extractFirstLine = explode("\n", $messageContent);
             $messageArr = explode(' ', $extractFirstLine[0]);
+            $keyword = preg_replace('/\s+/', '', $messageArr[0]);
+
+            $resultingKeyword = $this->Crud_model->isKeyworExist($keyword);
             
+            // show result
+            echo '<br><pre>'; print_r($resultingKeyword); echo '</pre>';
 
+            if (empty($resultingKeyword)) {
+                $this->passCat(
+                    $mobileNumber,
+                    $messageContent,
+                    0
+                );
 
-            echo $extractFirstLine[0];
+                echo "RESULT:  Unknown<br>";
+                echo "Message sent successfully but wasn't categorized!";
 
-            echo '<br>';
-            echo '<br>';
-            
-            echo $messageArr[0];
+            } else {
+                $this->passCat(
+                    $mobileNumber,
+                    $messageContent,
+                    $resultingKeyword[0]->SMS_Keyword_ID
+                );
 
-            echo '<br>';
-            $dataRes = $this->Crud_model->isKeyworExist($messageArr[0]);
-            echo json_encode($dataRes);
-
-              
-            echo '<br>';
-            echo '<br>';
-            echo json_encode($fin_data);
-            echo '<br>';
-            echo $mobileNumber;
-            echo '<br>';
-            echo $messageContent;
+                echo "RESULT:  ";
+                echo $resultingKeyword[0]->Keyword_desc;
+                echo "<br>";
+                echo "Message sent successfully and was categorized!";
+            }
         }
 	}
 

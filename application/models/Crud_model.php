@@ -60,13 +60,12 @@ class Crud_model extends CI_Model
 
     function isKeyworExist($keyword)  
     {
-        $query = $this->db
+        return $this->db
             ->select('SMS_Keyword_ID, Keyword_desc')
             ->from('sms_keyword')
             ->like('Keyword_desc', $keyword)
-            ->get();
-
-        return $query->result();
+            ->get()
+            ->result();
     }
 	
 }
